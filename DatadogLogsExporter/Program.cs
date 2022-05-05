@@ -58,9 +58,13 @@ var logWriter = new FileWriter(docPath, maxLogSize);
 
 var isRunning = true;
 var iterations = 0;
+var counter = 0;
 
 var stopWatch = new Stopwatch();
 stopWatch.Start();
+
+var stopWatchTotal = new Stopwatch();
+stopWatchTotal.Start();
 
 while (isRunning)
 {
@@ -80,6 +84,7 @@ while (isRunning)
             
         foreach (var item in response.Data)
         {
+            counter++;
             logWriter.Write(item);
         }
 
@@ -108,3 +113,8 @@ while (isRunning)
 }
 
 
+Console.WriteLine("");
+Console.WriteLine("Completed");
+Console.WriteLine($"   Iterations: {iterations}");
+Console.WriteLine($"   Loglines: {counter}");
+Console.WriteLine($"   Elapsed time: {(stopWatchTotal.ElapsedMilliseconds/1000)}s");
