@@ -31,5 +31,8 @@ namespace DatadogLogsExporter.models
         [Option('d', "domain", Required = false, HelpText = "What datadog server to use for export? com, eu. https://docs.datadoghq.com/api/latest/logs/#search-logs", Default = "com")]
         public string Domain { get; set; }
 
+        [Option('c', "cooldown", Required = false, HelpText = "Cooldown milliseconds between each http request. Can help with api rate limit", Default = 0)]
+        public int Cooldown { get; set; }
+
     };
 }

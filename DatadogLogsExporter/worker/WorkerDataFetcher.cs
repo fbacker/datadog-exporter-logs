@@ -15,6 +15,7 @@ namespace DatadogLogsExporter.worker
         private string _url;
         private int _maxIterations;
         private bool _verbose;
+        private int _cooldown;
 
 
         public WorkerDataFetcher(Config config, FileWriter logWriter, HttpDatadogClient datadogClient)
@@ -39,7 +40,7 @@ namespace DatadogLogsExporter.worker
                     Limit = opts.Count
                 }
             };
-            
+
         }
 
         public async Task DoWork(CancellationToken cancellationToken)
@@ -65,6 +66,8 @@ namespace DatadogLogsExporter.worker
                     _logWriter.Dispose();
                     Environment.Exit(0);
                 }
+
+                if (_cooldown > 0) await Task.Delay(_cooldown);
 
                 iterations++;
                 stopWatch.Restart();
