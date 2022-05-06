@@ -5,7 +5,6 @@ using DatadogLogsExporter.Policies;
 using DatadogLogsExporter.service;
 using DatadogLogsExporter.worker;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 
 CommandLineArguments opts = null;
 Parser.Default.ParseArguments<CommandLineArguments>(args)
