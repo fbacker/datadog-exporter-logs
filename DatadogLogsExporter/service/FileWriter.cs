@@ -1,32 +1,36 @@
-﻿using System.Runtime.InteropServices;
-using System.Runtime.Serialization.Formatters.Binary;
+﻿using DatadogLogsExporter.helpers;
 using System.Text.Json;
 
 namespace DatadogLogsExporter.service
 {
     public class FileWriter
     {
-        private int rotationIndex = 0;
-        private double currentBytes = 0;
-        private double maxBytesSize;
-        private string basePath;
-        private StreamWriter writer;
+        private int _rotationIndex = 0;
+        private double _currentBytes = 0;
+        private double _maxBytesSize;
+        private string _basePath;
+        private StreamWriter _writer;
 
-        public FileWriter(string basePath, double maxBytesSize)
+        public FileWriter(Config config)
         {
-            this.basePath = basePath;
-            this.maxBytesSize = maxBytesSize;
+            // Docker container local path
+            _basePath = "/files";
+
+            //@TODO, set max log size from options, but in mb, max limit?
+            double maxBytesSize = 5e+8;
+            _maxBytesSize = maxBytesSize;
         }
 
-        public void Write(dynamic data) {
+        public void Write(dynamic data)
+        {
 
 
             var sizeBytes = GetObjectSize(data);
-            var newSizeMeasure = currentBytes + sizeBytes;
-            if (writer is null || newSizeMeasure > maxBytesSize) rotateFile();
+            var newSizeMeasure = _currentBytes + sizeBytes;
+            if (_writer is null || newSizeMeasure > _maxBytesSize) rotateFile();
 
-            currentBytes += sizeBytes;
-            writer.WriteLine(data);
+            _currentBytes += sizeBytes;
+            _writer.WriteLine(data);
 
         }
 
@@ -41,24 +45,24 @@ namespace DatadogLogsExporter.service
         {
             Dispose();
 
-            rotationIndex++;
-            currentBytes = 0;
+            _rotationIndex++;
+            _currentBytes = 0;
 
-            var fileName = $"output_{rotationIndex}.log";
-            writer = new StreamWriter(Path.Combine(this.basePath, fileName));
+            var fileName = $"output_{_rotationIndex}.log";
+            _writer = new StreamWriter(Path.Combine(_basePath, fileName));
 
-            Console.WriteLine($"Setup new file for output: {fileName}");
+            Console.WriteLine($"{DateTime.Now} Setup new file for output: {fileName}");
         }
 
 
 
         public void Dispose()
         {
-            if (writer is not null)
+            if (_writer is not null)
             {
-                writer.Flush();
-                writer.Close();
-                writer.Dispose();
+                _writer.Flush();
+                _writer.Close();
+                _writer.Dispose();
             }
         }
     }
