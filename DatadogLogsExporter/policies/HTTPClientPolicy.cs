@@ -12,7 +12,7 @@ namespace DatadogLogsExporter.Policies
             ImmediateHttpRetry = Policy.HandleResult<HttpResponseMessage>(res => !res.IsSuccessStatusCode)
                                     .OrResult(msg => msg.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
                                     .WaitAndRetryAsync(3, 
-                                        retryAttempt => TimeSpan.FromSeconds(Math.Pow(3, retryAttempt)),
+                                        retryAttempt => TimeSpan.FromSeconds(Math.Pow(4, retryAttempt)),
                                         (exception, retryCount) =>
                                         {
                                             Console.WriteLine($"{DateTime.Now} Failed http call retry delay: {retryCount}, response code: {exception.Result.StatusCode}");
