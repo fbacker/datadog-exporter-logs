@@ -62,7 +62,7 @@ namespace DatadogLogsExporter.worker
 
                 if (cancellationToken.IsCancellationRequested)
                 {
-                    if (_verbose) Console.WriteLine($"{DateTime.Now} Cancellation token is requested. Exit");
+                    Console.WriteLine($"{DateTime.Now} Cancellation token is requested. Exit");
                     _logWriter.Dispose();
                     Environment.Exit(0);
                 }
