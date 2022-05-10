@@ -12,7 +12,7 @@ To see all available options run:
 
 We request IIS logs for a service between specific date from datadog EU.
 ```
-docker run \
+docker run -it \
     -v C:\Users\mystuff\output:/files \
     fredrickbacker/datadog-exporter-logs:latest \
     --datadog-api-key=d146-my-own-key-here-6d144f \
